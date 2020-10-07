@@ -124,7 +124,7 @@ namespace piano
                         if (MessageBox.Show("Score is " + hits + " of " + total + "\n\n 'OK' to copy to clipboard", "Congratz!", MessageBoxButtons.OKCancel) == System.Windows.Forms.DialogResult.OK)
                         {
 
-                            Clipboard.SetText(DateTime.Now.ToString() + ", "+hits + " of " + total + " ratio " + ((double)hits / total));
+                            Clipboard.SetText(DateTime.Now.ToString() + ", "+hits + " of " + total + String.Format(" ratio {0:0.00}", (double)hits / (double)total));
                         }
                     }
 
@@ -503,7 +503,7 @@ namespace piano
 
         private void button43_Click(object sender, EventArgs e)
         {
-            Clipboard.SetText(DateTime.Now.ToString() + ", " + hits + " of " + total + " ratio " + ((double)hits / total));
+            Clipboard.SetText(DateTime.Now.ToString() + ", " + hits + " of " + total + String.Format(" ratio {0:0.00}", (double)hits / (double)total));
         }
     }
 }
