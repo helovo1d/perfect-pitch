@@ -4,4 +4,6 @@ the perfect pitch training app.
 
 Uses C2 - B4 scale range.
 
-Download piano.7z , unzip and run piano.exe
+Download **piano.7z** , unzip and run **piano.exe**
+
+![alt text](http://url/to/img.png)
