@@ -124,7 +124,7 @@ namespace piano
                         if (MessageBox.Show("Score is " + hits + " of " + total + "\n\n 'OK' to copy to clipboard", "Congratz!", MessageBoxButtons.OKCancel) == System.Windows.Forms.DialogResult.OK)
                         {
 
-                            Clipboard.SetText(DateTime.Now.ToString() + ", "+hits + " of " + total + String.Format(" ratio {0:0.00}", (double)hits / (double)total));
+                            Clipboard.SetText(DateTime.Now.ToShortDateString() + " " + getSelected() + ", "+hits + "/" + total + String.Format(" {0:0.00}", (double)hits / (double)total));
                         }
                     }
 
@@ -205,6 +205,18 @@ namespace piano
         }
 
         HashSet<CheckBox> selected = new HashSet<CheckBox>();
+        public String getSelected() {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("{");
+            foreach (CheckBox cb in selected) {
+
+                sb.Append(cb.Tag.ToString() + ",");
+            }
+            sb.Remove(sb.Length - 1, 1);
+            sb.Append("}");
+
+            return sb.ToString();
+        }
         private void checked_chagned(object sender, EventArgs e)
         {
             CheckBox cb = (CheckBox)sender;
@@ -503,7 +515,7 @@ namespace piano
 
         private void button43_Click(object sender, EventArgs e)
         {
-            Clipboard.SetText(DateTime.Now.ToString() + ", " + hits + " of " + total + String.Format(" ratio {0:0.00}", (double)hits / (double)total));
+            Clipboard.SetText(DateTime.Now.ToShortDateString() +" "+getSelected() +", " + hits + "/" + total + String.Format(" {0:0.00}", (double)hits / (double)total));
         }
     }
 }
