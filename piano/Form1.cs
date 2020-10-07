@@ -278,21 +278,33 @@ namespace piano
 
         }
         CheckBox current;
-
+        int prevrandom = 0;
         private void button40_Click(object sender, EventArgs e)
         {
-
-            answered = false;
+            if (selected.Count < 1)
+            {
+                MessageBox.Show("Check few notes to play (Checkboxes)","notice");
+                return;
+            }
+                answered = false;
             total++;
             label5.Text = total.ToString();
 
             this.label6.Text = "";
 
             Random rnd = new Random();
+            int tmpRand = rnd.Next(selected.Count);
+            if (selected.Count > 2)
+            {
+                while (tmpRand == prevrandom)
+                {
 
-            current = selected.ElementAt(rnd.Next(selected.Count));
+                    tmpRand = rnd.Next(selected.Count);
+                }
+            }
+            current = selected.ElementAt(tmpRand);
 
-
+            prevrandom = tmpRand;
 
 
             pl.Stop();
