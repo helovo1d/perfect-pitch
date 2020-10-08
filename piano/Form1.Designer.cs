@@ -124,6 +124,8 @@
             this.toolTip3 = new System.Windows.Forms.ToolTip(this.components);
             this.toolTip4 = new System.Windows.Forms.ToolTip(this.components);
             this.toolTip5 = new System.Windows.Forms.ToolTip(this.components);
+            this.button44 = new System.Windows.Forms.Button();
+            this.button45 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -963,6 +965,8 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.button45);
+            this.groupBox1.Controls.Add(this.button44);
             this.groupBox1.Controls.Add(this.checkBox25);
             this.groupBox1.Controls.Add(this.checkBox26);
             this.groupBox1.Controls.Add(this.checkBox27);
@@ -1091,6 +1095,24 @@
             this.button43.UseVisualStyleBackColor = true;
             this.button43.Click += new System.EventHandler(this.button43_Click);
             // 
+            // button44
+            // 
+            this.button44.Location = new System.Drawing.Point(284, 16);
+            this.button44.Name = "button44";
+            this.button44.Size = new System.Drawing.Size(3, 69);
+            this.button44.TabIndex = 75;
+            this.button44.Text = "ignore";
+            this.button44.UseVisualStyleBackColor = true;
+            // 
+            // button45
+            // 
+            this.button45.Location = new System.Drawing.Point(564, 16);
+            this.button45.Name = "button45";
+            this.button45.Size = new System.Drawing.Size(3, 71);
+            this.button45.TabIndex = 76;
+            this.button45.Text = "ignore";
+            this.button45.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1218,6 +1240,8 @@
         private System.Windows.Forms.ToolTip toolTip3;
         private System.Windows.Forms.ToolTip toolTip4;
         private System.Windows.Forms.ToolTip toolTip5;
+        private System.Windows.Forms.Button button45;
+        private System.Windows.Forms.Button button44;
     }
 }
 

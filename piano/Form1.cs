@@ -31,16 +31,19 @@ namespace piano
         public Form1()
         {
             InitializeComponent();
-
+            
             foreach (Control c in this.groupBox1.Controls)
             {
                 if (c.GetType() == typeof(Button))
                 {
+                     
                     Button b = (Button)c;
+                    if (b.Text.Equals("ignore")) continue;
 
                     b.MouseDown += new MouseEventHandler(button_pressed);
                     b.MouseUp += new MouseEventHandler(button_released);
-                    //   b.MouseLeave+= new EventHandler(button_leave);
+                    b.MouseLeave+= new EventHandler(button_leave);
+                    
                 }
                 if (c.GetType() == typeof(CheckBox))
                 {
@@ -63,7 +66,18 @@ namespace piano
 
             toolTip5.SetToolTip(this.progressBar1, "Streak of 20 to win the game!");
         }
+        private void button_leave(Object o, EventArgs e) {
+            Button b = (Button)o;
+            if (b.Tag.ToString().Length == 3) // black key
+            {
 
+                b.BackColor = SystemColors.ActiveCaptionText;
+            }
+            else
+            {
+                b.BackColor = SystemColors.ButtonHighlight;
+            }
+        }
 
         private void button_released(Object o, MouseEventArgs e)
         {
@@ -480,6 +494,7 @@ namespace piano
             label6.Text = "";
             label4.Text = "0";
             label5.Text = "0";
+            streak = 0;
             cntList = 0;
         }
 
