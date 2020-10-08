@@ -31,7 +31,7 @@ namespace piano
         public Form1()
         {
             InitializeComponent();
-            
+            readPath();
             foreach (Control c in this.groupBox1.Controls)
             {
                 if (c.GetType() == typeof(Button))
@@ -51,9 +51,11 @@ namespace piano
                     cb.CheckedChanged += new EventHandler(checked_chagned);
                 }
             }
+
             button37_Click(null, null);
             this.listBox1.MouseDoubleClick += new MouseEventHandler(list_double_clicked);
-            pl.SoundLocation = path + "loading.wav";
+
+            pl.SoundLocation = @"res\loading.wav";
             pl.Play();
 
 
@@ -94,8 +96,36 @@ namespace piano
             }
 
         }
+        private void play(String note_octave) {
+
+            pl.Stop();
+
+            String octave = note_octave.Substring(note_octave.Length - 1);
+            String note = note_octave.Substring(0, note_octave.Length - 1);
+
+            pl.SoundLocation = path + "/octave"+octave+"/"+note + ".wav";
+           
+            pl.Play();
+        }
+        private void readPath() {
+
+            System.IO.StreamReader file = new System.IO.StreamReader(@"config");
+            String line = null;
+            while ((line = file.ReadLine()) != null)
+            {
+                path = line;
+                if (line.Contains("path")) {
+                    path = line.Substring(line.IndexOf("=") + 1);
+                    path = path.Trim();
+                    break;
+                }
+            }
+
+            file.Close();
+        }
+        String path = "res/grand_piano";
         // String path = @"notes2-4.01\";
-        String path = @"res\";
+      //  String path = @"res\";
         private void button_pressed(Object o, MouseEventArgs e)
         {
 
@@ -106,11 +136,12 @@ namespace piano
             if (checkBox37.Checked == false)
             {
 
-                pl.Stop();
+                // pl.Stop();
 
-                pl.SoundLocation = path + b.Tag + ".wav";
+                //   pl.SoundLocation = path + b.Tag + ".wav";
 
-                pl.Play();
+                // pl.Play();
+                play(b.Tag.ToString());
             }
             if (current == null) return;
 
@@ -207,12 +238,12 @@ namespace piano
 
                 NoteAnswer na = (NoteAnswer)this.listBox1.Items[index];
 
-                pl.Stop();
+                //  pl.Stop();
 
-                pl.SoundLocation = path + na.note + ".wav";
+                //  pl.SoundLocation = path + na.note + ".wav";
 
-                pl.Play();
-
+                //   pl.Play();
+                play(na.note);
 
 
             }
@@ -333,9 +364,10 @@ namespace piano
             prevrandom = tmpRand;
 
 
-            pl.Stop();
-            pl.SoundLocation = path + current.Tag + ".wav";
-            pl.Play();
+            //  pl.Stop();
+            //  pl.SoundLocation = path + current.Tag + ".wav";
+            //  pl.Play();
+            play(current.Tag.ToString());
 
 
             NoteAnswer na = new NoteAnswer(cntList++ + " " + "Note played");
@@ -478,9 +510,10 @@ namespace piano
         {
             if (current == null) return;
 
-            pl.Stop();
-            pl.SoundLocation = path + current.Tag + ".wav";
-            pl.Play();
+            //  pl.Stop();
+            //  pl.SoundLocation = path + current.Tag + ".wav";
+            //   pl.Play();
+            play(current.Tag.ToString());
         }
 
         private void button42_Click(object sender, EventArgs e)
