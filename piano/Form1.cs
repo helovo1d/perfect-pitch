@@ -104,7 +104,7 @@ namespace piano
             String note = note_octave.Substring(0, note_octave.Length - 1);
 
             pl.SoundLocation = path + "/octave"+octave+"/"+note + ".wav";
-           
+          
             pl.Play();
         }
         private void readPath() {
@@ -335,7 +335,7 @@ namespace piano
 
         }
         CheckBox current;
-        int prevrandom = 0;
+      
         private void button40_Click(object sender, EventArgs e)
         {
             if (selected.Count < 1)
@@ -350,18 +350,10 @@ namespace piano
             this.label6.Text = "";
 
             Random rnd = new Random();
-            int tmpRand = rnd.Next(selected.Count);
-            if (selected.Count > 2)
-            {
-                while (tmpRand == prevrandom)
-                {
+            
+            current = selected.ElementAt(rnd.Next(selected.Count));
 
-                    tmpRand = rnd.Next(selected.Count);
-                }
-            }
-            current = selected.ElementAt(tmpRand);
-
-            prevrandom = tmpRand;
+           
 
 
             //  pl.Stop();
@@ -392,15 +384,7 @@ namespace piano
 
         private void button39_Click_1(object sender, EventArgs e)
         {
-            foreach (Control c in groupBox1.Controls)
-            {
-                if (c.GetType() == typeof(CheckBox))
-                {
-                    ((CheckBox)c).Checked = false;
-
-                }
-
-            }
+            uncheckAll();
             foreach (Control c in groupBox1.Controls)
             {
                 if (c.GetType() == typeof(CheckBox))
@@ -459,15 +443,7 @@ namespace piano
 
         private void button38_Click(object sender, EventArgs e)
         {
-            foreach (Control c in groupBox1.Controls)
-            {
-                if (c.GetType() == typeof(CheckBox))
-                {
-                    ((CheckBox)c).Checked = false;
-
-                }
-
-            }
+            uncheckAll();
             foreach (Control c in groupBox1.Controls)
             {
                 if (c.GetType() == typeof(CheckBox))
@@ -564,6 +540,197 @@ namespace piano
         private void button43_Click(object sender, EventArgs e)
         {
             Clipboard.SetText(DateTime.Now.ToShortDateString() +" "+getSelected() +", " + hits + "/" + total + String.Format(" {0:0.00}", (double)hits / (double)total));
+        }
+        private void uncheckAll() {
+            foreach (Control c in groupBox1.Controls)
+            {
+                if (c.GetType() == typeof(CheckBox))
+                {
+                    ((CheckBox)c).Checked = false;
+
+                }
+
+            }
+
+        }
+        private void button46_Click(object sender, EventArgs e)
+        {
+            uncheckAll();
+            foreach (Control c in groupBox1.Controls)
+            {
+                if (c.GetType() == typeof(CheckBox))
+                {
+                    String str = ((CheckBox)c).Tag.ToString();
+                    switch (str)
+                    {
+                        case "c2":
+                        case "d2":
+                        case "e2":
+                        case "f2":
+                        case "g2":
+                        case "a2":
+                        case "b2":
+                      
+                            ((CheckBox)c).Checked = true;
+                            break;
+                    }
+
+                }
+
+            }
+        }
+
+        private void button47_Click(object sender, EventArgs e)
+        {
+            uncheckAll();
+            foreach (Control c in groupBox1.Controls)
+            {
+                if (c.GetType() == typeof(CheckBox))
+                {
+                    String str = ((CheckBox)c).Tag.ToString();
+                    switch (str)
+                    {
+                        case "c3":
+                        case "d3":
+                        case "e3":
+                        case "f3":
+                        case "g3":
+                        case "a3":
+                        case "b3":
+
+                            ((CheckBox)c).Checked = true;
+                            break;
+                    }
+
+                }
+
+            }
+        }
+
+        private void button48_Click(object sender, EventArgs e)
+        {
+            uncheckAll();
+            foreach (Control c in groupBox1.Controls)
+            {
+                if (c.GetType() == typeof(CheckBox))
+                {
+                    String str = ((CheckBox)c).Tag.ToString();
+                    switch (str)
+                    {
+                        case "c4":
+                        case "d4":
+                        case "e4":
+                        case "f4":
+                        case "g4":
+                        case "a4":
+                        case "b4":
+
+                            ((CheckBox)c).Checked = true;
+                            break;
+                    }
+
+                }
+
+            }
+        }
+
+        private void button49_Click(object sender, EventArgs e)
+        {
+            uncheckAll();
+            foreach (Control c in groupBox1.Controls)
+            {
+                if (c.GetType() == typeof(CheckBox))
+                {
+                    String str = ((CheckBox)c).Tag.ToString();
+                    switch (str)
+                    {
+                        case "c2":
+                        case "d2":
+                        case "e2":
+                        case "f2":
+                        case "g2":
+                        case "a2":
+                        case "b2":
+
+                        case "cd2":
+                        case "de2":
+                        case "fg2":
+                        case "ga2":
+                        case "ab2":
+
+                            ((CheckBox)c).Checked = true;
+                            break;
+                    }
+
+                }
+
+            }
+        }
+
+        private void button50_Click(object sender, EventArgs e)
+        {
+            uncheckAll();
+            foreach (Control c in groupBox1.Controls)
+            {
+                if (c.GetType() == typeof(CheckBox))
+                {
+                    String str = ((CheckBox)c).Tag.ToString();
+                    switch (str)
+                    {
+                        case "c3":
+                        case "d3":
+                        case "e3":
+                        case "f3":
+                        case "g3":
+                        case "a3":
+                        case "b3":
+
+                        case "cd3":
+                        case "de3":
+                        case "fg3":
+                        case "ga3":
+                        case "ab3":
+
+                            ((CheckBox)c).Checked = true;
+                            break;
+                    }
+
+                }
+
+            }
+        }
+
+        private void button51_Click(object sender, EventArgs e)
+        {
+            uncheckAll();
+            foreach (Control c in groupBox1.Controls)
+            {
+                if (c.GetType() == typeof(CheckBox))
+                {
+                    String str = ((CheckBox)c).Tag.ToString();
+                    switch (str)
+                    {
+                        case "c4":
+                        case "d4":
+                        case "e4":
+                        case "f4":
+                        case "g4":
+                        case "a4":
+                        case "b4":
+
+                        case "cd4":
+                        case "de4":
+                        case "fg4":
+                        case "ga4":
+                        case "ab4":
+
+                            ((CheckBox)c).Checked = true;
+                            break;
+                    }
+
+                }
+
+            }
         }
     }
 }
