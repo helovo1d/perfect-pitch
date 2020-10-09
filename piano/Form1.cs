@@ -31,6 +31,7 @@ namespace piano
         public Form1()
         {
             InitializeComponent();
+            this.KeyPreview = true;
             readPath();
             foreach (Control c in this.groupBox1.Controls)
             {
@@ -67,6 +68,13 @@ namespace piano
             toolTip4.SetToolTip(this.listBox1, "Double click on selected item to replay note from history");
 
             toolTip5.SetToolTip(this.progressBar1, "Streak of 20 to win the game!");
+
+
+            toolTip6.SetToolTip(this.button40, "Also shortcut 'space' to next!");
+
+            toolTip7.SetToolTip(this.button41, "Also shortcut 'r' to repeat!");
+
+
         }
         private void button_leave(Object o, EventArgs e) {
             Button b = (Button)o;
@@ -731,6 +739,44 @@ namespace piano
                 }
 
             }
+        }
+
+        private void Form1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+           
+         
+            e.Handled = true;
+        }
+        Boolean isDown = false;
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+
+            if (isDown == false)
+            {
+
+
+                switch (e.KeyCode)
+                {
+                    case Keys.Space:
+                        button40_Click(null, null);
+                        break;
+
+                    case Keys.R:
+                        button41_Click(null, null);
+                        break;
+                }
+               
+                
+                e.Handled = true;
+
+                isDown = true;
+            }
+        }
+
+        private void Form1_KeyUp(object sender, KeyEventArgs e)
+        {
+            isDown = false;
+            e.Handled = true;
         }
     }
 }
