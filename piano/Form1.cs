@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-
+using System.Windows.Media;
 
 
 using System.Media;
@@ -18,6 +18,11 @@ using System.Threading;
 using System.Timers;
 using System.Runtime.CompilerServices;
 
+
+
+using System.Windows;
+using Clipboard = System.Windows.Forms.Clipboard;
+
 namespace piano
 {
 
@@ -26,10 +31,13 @@ namespace piano
     {
         static System.Media.SoundPlayer pl = new SoundPlayer();
 
-        
+
+
+
 
         public Form1()
         {
+
             InitializeComponent();
             this.KeyPreview = true;
             readPath();
@@ -37,14 +45,16 @@ namespace piano
             {
                 if (c.GetType() == typeof(Button))
                 {
-                     
+
                     Button b = (Button)c;
                     if (b.Text.Equals("ignore")) continue;
 
                     b.MouseDown += new MouseEventHandler(button_pressed);
                     b.MouseUp += new MouseEventHandler(button_released);
-                    b.MouseLeave+= new EventHandler(button_leave);
-                    
+                    b.MouseLeave += new EventHandler(button_leave);
+
+                    deviceMap.Add(b.Tag.ToString(), null);
+                    load(b.Tag.ToString());
                 }
                 if (c.GetType() == typeof(CheckBox))
                 {
@@ -56,11 +66,10 @@ namespace piano
             button37_Click(null, null);
             this.listBox1.MouseDoubleClick += new MouseEventHandler(list_double_clicked);
 
-            pl.SoundLocation = @"res\loading.wav";
-            pl.Play();
 
 
-            toolTip1.SetToolTip(this.button43,"Save current score to clipboard");
+
+            toolTip1.SetToolTip(this.button43, "Save current score to clipboard");
             toolTip2.SetToolTip(this.checkBox37, "Turn on/off piano key sound");
 
             toolTip3.SetToolTip(this.button37, "Preset C,D,E of 2,3,4 octave. The default");
@@ -75,8 +84,53 @@ namespace piano
             toolTip7.SetToolTip(this.button41, "Also shortcut 'r' to repeat!");
 
 
+            var c1 = new System.Windows.Media.MediaPlayer();
+            c1.Open(new System.Uri(Path.GetFullPath("res/loading.wav")));
+            c1.Play();
+
         }
-        private void button_leave(Object o, EventArgs e) {
+
+
+        Dictionary<String, Object> deviceMap = new Dictionary<String, Object>();
+
+
+
+        private void load(String note_octave)
+        {
+
+
+
+            var c = new System.Windows.Media.MediaPlayer();
+
+
+            c.Open(new System.Uri(Path.GetFullPath(getAudioPath(note_octave))));
+            deviceMap[note_octave] = c;
+            System.Threading.Thread.Sleep(50);
+
+
+
+
+        }
+        private void playWindows(String note_octave)
+        {
+
+            System.Windows.Media.MediaPlayer mp = (MediaPlayer)deviceMap[note_octave];
+            mp.Stop();
+            mp.Position = new TimeSpan(0);
+            mp.Play();
+
+
+
+        }
+
+        private void C_MediaEnded(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        private void button_leave(Object o, EventArgs e)
+        {
             Button b = (Button)o;
             if (b.Tag.ToString().Length == 3) // black key
             {
@@ -104,25 +158,47 @@ namespace piano
             }
 
         }
-        private void play(String note_octave) {
 
-            pl.Stop();
+        private String getAudioPath(String note_octave)
+        {
 
             String octave = note_octave.Substring(note_octave.Length - 1);
             String note = note_octave.Substring(0, note_octave.Length - 1);
 
-            pl.SoundLocation = path + "/octave"+octave+"/"+note + ".wav";
-          
+            String audio_path = path + "/octave" + octave + "/" + note + ".wav";
+            return audio_path;
+        }
+        private void play_basic(String note_octave)
+        {
+
+            pl.Stop();
+
+
+
+            pl.SoundLocation = getAudioPath(note_octave);
+
             pl.Play();
         }
-        private void readPath() {
+        private void play(String note_octave)
+        {
+
+            // playNaudio(note_octave);
+
+            //     play_basic(note_octave);
+
+            playWindows(note_octave);
+        }
+
+        private void readPath()
+        {
 
             System.IO.StreamReader file = new System.IO.StreamReader(@"config");
             String line = null;
             while ((line = file.ReadLine()) != null)
             {
                 path = line;
-                if (line.Contains("path")) {
+                if (line.Contains("path"))
+                {
                     path = line.Substring(line.IndexOf("=") + 1);
                     path = path.Trim();
                     break;
@@ -133,7 +209,7 @@ namespace piano
         }
         String path = "res/grand_piano";
         // String path = @"notes2-4.01\";
-      //  String path = @"res\";
+        //  String path = @"res\";
         private void button_pressed(Object o, MouseEventArgs e)
         {
 
@@ -163,8 +239,8 @@ namespace piano
                     hits++;
                     label4.Text = hits.ToString();
                     streak++;
-                    this.progressBar1.Value = streak*10;
-                   
+                    this.progressBar1.Value = streak * 10;
+
 
                     NoteAnswer na = new NoteAnswer(cntList++ + " " + "Answer " + b.Tag.ToString() + " correct");
                     na.note = b.Tag.ToString();
@@ -177,7 +253,7 @@ namespace piano
                         if (MessageBox.Show("Score is " + hits + " of " + total + "\n\n 'OK' to copy to clipboard", "Congratz!", MessageBoxButtons.OKCancel) == System.Windows.Forms.DialogResult.OK)
                         {
 
-                            Clipboard.SetText(DateTime.Now.ToShortDateString() + " " + getSelected() + ", "+hits + "/" + total + String.Format(" {0:0.00}", (double)hits / (double)total));
+                            System.Windows.Forms.Clipboard.SetText(DateTime.Now.ToShortDateString() + " " + getSelected() + ", " + hits + "/" + total + String.Format(" {0:0.00}", (double)hits / (double)total));
                         }
                     }
 
@@ -202,12 +278,12 @@ namespace piano
                     this.listBox1.TopIndex = this.listBox1.Items.Count - 1;
                     streak -= 5;
                     if (streak < 0) streak = 0;
-                   
+
 
                     aTimer = new System.Timers.Timer(30);
                     aTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
                     aTimer.SynchronizingObject = this;
-                    
+
                     aTimer.Start();
 
                 }
@@ -217,9 +293,9 @@ namespace piano
             answered = true;
 
         }
-        private  void OnTimedEvent(object source, ElapsedEventArgs e)
+        private void OnTimedEvent(object source, ElapsedEventArgs e)
         {
-            if (progressBar1.Value > streak*10)
+            if (progressBar1.Value > streak * 10)
             {
 
                 progressBar1.Value--;
@@ -258,10 +334,12 @@ namespace piano
         }
 
         HashSet<CheckBox> selected = new HashSet<CheckBox>();
-        public String getSelected() {
+        public String getSelected()
+        {
             StringBuilder sb = new StringBuilder();
             sb.Append("{");
-            foreach (CheckBox cb in selected) {
+            foreach (CheckBox cb in selected)
+            {
 
                 sb.Append(cb.Tag.ToString() + ",");
             }
@@ -278,13 +356,13 @@ namespace piano
             {
 
                 selected.Add(cb);
-               
+
             }
             else
             {
 
                 selected.Remove(cb);
-             
+
             }
 
 
@@ -343,25 +421,25 @@ namespace piano
 
         }
         CheckBox current;
-      
+
         private void button40_Click(object sender, EventArgs e)
         {
             if (selected.Count < 1)
             {
-                MessageBox.Show("Check few notes to play (Checkboxes)","notice");
+                MessageBox.Show("Check few notes to play (Checkboxes)", "notice");
                 return;
             }
-                answered = false;
+            answered = false;
             total++;
             label5.Text = total.ToString();
 
             this.label6.Text = "";
 
             Random rnd = new Random();
-            
+
             current = selected.ElementAt(rnd.Next(selected.Count));
 
-           
+
 
 
             //  pl.Stop();
@@ -547,9 +625,10 @@ namespace piano
 
         private void button43_Click(object sender, EventArgs e)
         {
-            Clipboard.SetText(DateTime.Now.ToShortDateString() +" "+getSelected() +", " + hits + "/" + total + String.Format(" {0:0.00}", (double)hits / (double)total));
+            Clipboard.SetText(DateTime.Now.ToShortDateString() + " " + getSelected() + ", " + hits + "/" + total + String.Format(" {0:0.00}", (double)hits / (double)total));
         }
-        private void uncheckAll() {
+        private void uncheckAll()
+        {
             foreach (Control c in groupBox1.Controls)
             {
                 if (c.GetType() == typeof(CheckBox))
@@ -578,7 +657,7 @@ namespace piano
                         case "g2":
                         case "a2":
                         case "b2":
-                      
+
                             ((CheckBox)c).Checked = true;
                             break;
                     }
@@ -743,11 +822,14 @@ namespace piano
 
         private void Form1_KeyPress(object sender, KeyPressEventArgs e)
         {
-           
-         
+
+
             e.Handled = true;
         }
         Boolean isDown = false;
+
+
+
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
 
@@ -765,8 +847,8 @@ namespace piano
                         button41_Click(null, null);
                         break;
                 }
-               
-                
+
+
                 e.Handled = true;
 
                 isDown = true;
