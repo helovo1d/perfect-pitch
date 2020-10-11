@@ -22,6 +22,7 @@ using System.Runtime.CompilerServices;
 
 using System.Windows;
 using Clipboard = System.Windows.Forms.Clipboard;
+using System.Diagnostics;
 
 namespace piano
 {
@@ -83,9 +84,14 @@ namespace piano
 
             toolTip7.SetToolTip(this.button41, "Also shortcut 'r' to repeat!");
 
+            System.Threading.Thread.Sleep(500);
 
             var c1 = new System.Windows.Media.MediaPlayer();
-            c1.Open(new System.Uri(Path.GetFullPath("res/loading.wav")));
+            c1.Open(new System.Uri(Path.GetFullPath(@"res/loading.wav")));
+
+
+            deviceMap.Add("loading.wav", c1);
+            System.Threading.Thread.Sleep(500);
             c1.Play();
 
         }
@@ -101,11 +107,11 @@ namespace piano
 
 
             var c = new System.Windows.Media.MediaPlayer();
-
-
+           
+            c.Volume = 0.5;
             c.Open(new System.Uri(Path.GetFullPath(getAudioPath(note_octave))));
             deviceMap[note_octave] = c;
-            System.Threading.Thread.Sleep(50);
+            System.Threading.Thread.Sleep(100);
 
 
 
@@ -252,8 +258,11 @@ namespace piano
                     {
                         if (MessageBox.Show("Score is " + hits + " of " + total + "\n\n 'OK' to copy to clipboard", "Congratz!", MessageBoxButtons.OKCancel) == System.Windows.Forms.DialogResult.OK)
                         {
+                            stopWatch.Stop();
+                            saveToClipboard();
 
-                            System.Windows.Forms.Clipboard.SetText(DateTime.Now.ToShortDateString() + " " + getSelected() + ", " + hits + "/" + total + String.Format(" {0:0.00}", (double)hits / (double)total));
+
+
                         }
                     }
 
@@ -421,7 +430,7 @@ namespace piano
 
         }
         CheckBox current;
-
+        Boolean freshStart = true;
         private void button40_Click(object sender, EventArgs e)
         {
             if (selected.Count < 1)
@@ -439,12 +448,7 @@ namespace piano
 
             current = selected.ElementAt(rnd.Next(selected.Count));
 
-
-
-
-            //  pl.Stop();
-            //  pl.SoundLocation = path + current.Tag + ".wav";
-            //  pl.Play();
+ 
             play(current.Tag.ToString());
 
 
@@ -454,9 +458,14 @@ namespace piano
             this.listBox1.Items.Add(na);
             this.listBox1.TopIndex = this.listBox1.Items.Count - 1;
 
+            if (freshStart)
+            {
+                freshStart = false;
 
-
+               stopWatch = Stopwatch.StartNew();
+            }
         }
+        Stopwatch stopWatch = null;
 
         private void label2_Click(object sender, EventArgs e)
         {
@@ -580,6 +589,12 @@ namespace piano
 
         private void button42_Click(object sender, EventArgs e)
         {
+            freshStart = true;
+            if (stopWatch != null)
+            {
+                stopWatch.Stop();
+                stopWatch = null;
+            }
             total = 0;
             hits = 0;
             listBox1.Items.Clear();
@@ -623,9 +638,16 @@ namespace piano
 
         }
 
+        private void saveToClipboard() {
+
+          
+            TimeSpan ts = stopWatch.Elapsed;
+            System.Windows.Forms.Clipboard.SetText(DateTime.Now.ToShortDateString() + " " + getSelected()  + String.Format(", {0:0.00}", ts.TotalMinutes) + " min, " + hits + "/" + total + String.Format(" {0:0.00}", (double)hits / (double)total));
+
+        }
         private void button43_Click(object sender, EventArgs e)
         {
-            Clipboard.SetText(DateTime.Now.ToShortDateString() + " " + getSelected() + ", " + hits + "/" + total + String.Format(" {0:0.00}", (double)hits / (double)total));
+            saveToClipboard();
         }
         private void uncheckAll()
         {
@@ -859,6 +881,14 @@ namespace piano
         {
             isDown = false;
             e.Handled = true;
+        }
+
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
+            foreach (MediaPlayer mp in deviceMap.Values) {
+
+                mp.Volume = ((double)this.trackBar1.Value / (double)10);
+            }
         }
     }
 }
